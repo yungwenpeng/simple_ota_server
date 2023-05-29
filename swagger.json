@@ -1,0 +1,114 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Local Test API",
+        "description": "Simple OTA Server RESTful API in Node.js",
+        "version": "0.0.1",
+        "license": {
+            "name": "Apache License Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "tags": [
+        {
+            "name": "ota-api-controller",
+            "description": "OTA API Controller"
+        }
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/otaApi/packages?filename={filename}": {
+            "get": {
+                "tags": [
+                    "ota-api-controller"
+                ],
+                "operationId": "getOTAPackageInfoUsingGET",
+                "summary": "Get ota package / all packages info",
+                "consumes": [
+                    "application/json"
+                ],
+                "description": "Fetch the OTA package info object based on the provided filename. \"xxxxx.zip\" for fetch one package info or \"all\" for fetch all packages info.",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "required": true,
+                        "in": "path",
+                        "type": "string",
+                        "description": "filename of the ota package"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/OtaPackageInfo"
+                        },
+                        "description": "A JSON array of ota package information"
+                    },
+                    "400": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer", "example": 400
+                                },
+                                "message": {
+                                    "type": "string", "example": "Invalid request body"
+                                }
+                            }
+                        },
+                        "description": "Bad Request"
+                    },
+                    "409": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer", "example": 409
+                                },
+                                "message": {
+                                    "type": "string", "example": "Requested item wasn't found!"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "OtaPackageInfo": {
+            "type": "object",
+            "properties": {
+                "fileName": {
+                    "type": "string",
+                    "example": "xxxxx.zip"
+                },
+                "post-build": {
+                    "type": "string",
+                    "example": ""
+                },
+                "pre-build": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "InvalidResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

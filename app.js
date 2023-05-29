@@ -6,6 +6,12 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var otaApiRouter = require('./routes/otaApi');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+const fs = require('fs')
+var options = {
+  customCss: fs.readFileSync(("./swagger.css"), 'utf8')
+};
 
 var app = express();
 
@@ -19,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 app.use('/', indexRouter);
 app.use('/otaApi', otaApiRouter)
 

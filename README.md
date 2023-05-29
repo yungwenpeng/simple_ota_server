@@ -3,11 +3,19 @@
 [Express application generator](https://expressjs.com/en/starter/generator.html)  
 
 [ADM-ZIP](https://github.com/cthackers/adm-zip/wiki/ADM-ZIP)
-Test API tool:[Postman](https://www.postman.com/downloads/)
+Test API tool:[Postman](https://www.postman.com/downloads/)  
+Simplify API development:[Swagger](https://swagger.io/)  
+[HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)  
   
 ### how to use 
 1. upload ota package files to 'ota_files' 
 2. Install package & start service
    $ npm install  
    $ npm start  
-
+  
+### Demo: 
+Node.js REST API using Swagger
+![swaggerui_demo](swagger-ui-demo.gif)  
+  
+Node.js REST API using Postman 
+![postman_demo](postman-demo.gif)  
