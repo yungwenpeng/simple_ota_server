@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "adm-zip": "^0.5.10",
     "cookie-parser": "~1.4.4",
     "core-js": "^3.30.2",
     "debug": "~2.6.9",

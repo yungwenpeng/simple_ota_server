@@ -1,1 +1,3 @@
 node_modules
+!/ota_files/.keep
+ota_files/*
