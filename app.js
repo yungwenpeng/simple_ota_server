@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var otaApiRouter = require('./routes/otaApi');
+// Configure Swagger UI
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const fs = require('fs')
@@ -23,9 +24,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+// Set up static folder
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'ota_files')));
+// Configure Swagger UI
 app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+// Define the route
 app.use('/', indexRouter);
 app.use('/otaApi', otaApiRouter)
 

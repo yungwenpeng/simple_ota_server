@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require("path");
 const AdmZip = require("adm-zip");
+const formidable = require('formidable');
 
 async function downloadOtaPackage(req, res) {
     console.log("downloadOtaPackage: ", req.query);
@@ -127,7 +128,46 @@ function readFile(data, split_token) {
     return keyValueData;
 }
 
+async function uploadOtaPackage(req, res) {
+    console.log("uploadOtaPackage: ", req.params);
+    const filename = req.params.filename;
+
+    // Create a Formidable form object
+    const form = formidable({
+        uploadDir: './ota_files', // Specify the upload directory
+        multiples: false, // Allow only single file upload
+        keepExtensions: true // Preserve the original file extension
+    });
+    console.log("formidable: ", form);
+
+    // Parse the uploaded file
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to upload file' });
+        }
+        //console.log("files: ", files);
+
+        // Check if the file type is a zip
+        const uploadedFile = files.file
+        console.log("uploadedFile: ", uploadedFile);
+        if (!uploadedFile || uploadedFile.mimetype !== 'application/zip') {
+            return res.status(400).json({ error: 'Only zip files are allowed' });
+        }
+
+        // Move the temporary file to the specified directory and rename it with the provided filename
+        const newFilePath = path.join(form.uploadDir, filename);
+        fs.rename(uploadedFile.filepath, newFilePath, (err) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to save file' });
+            }
+
+            return res.json({ message: 'File uploaded successfully' });
+        });
+    });
+}
+
 module.exports = {
     downloadOtaPackage,
     getOtaPackageInfo,
+    uploadOtaPackage,
 };

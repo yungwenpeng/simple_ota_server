@@ -137,6 +137,72 @@
                     }
                 }
             }
+        },
+        "/otaApi/upload/{filename}": {
+            "post": {
+                "tags": [
+                    "ota-api-controller"
+                ],
+                "operationId": "uploadOTAPackageUsingPOST",
+                "summary": "Upload OTA Package",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "description": "Upload the OTA Package to /ota_files.",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "required": true,
+                        "in": "path",
+                        "type": "string",
+                        "description": "A string value representing the ota package file name."
+                    },
+                    {
+                        "name": "file",
+                        "required": true,
+                        "in": "formData",
+                        "type": "file",
+                        "mimetype": "application/zip",
+                        "description": "Select OTA Package"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/OtaPackageInfo"
+                        },
+                        "description": "A JSON array of ota package information"
+                    },
+                    "400": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer", "example": 400
+                                },
+                                "message": {
+                                    "type": "string", "example": "Only zip files are allowed!"
+                                }
+                            }
+                        },
+                        "description": "Not Allow"
+                    },
+                    "500": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer", "example": 500
+                                },
+                                "message": {
+                                    "type": "string", "example": "Failed to upload / save file!"
+                                }
+                            }
+                        },
+                        "description": "Failed upload / save"
+                    }
+                }
+            }
         }
     },
     "definitions": {
