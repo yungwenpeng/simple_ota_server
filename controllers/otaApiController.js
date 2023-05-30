@@ -2,6 +2,24 @@ const fs = require('fs');
 const path = require("path");
 const AdmZip = require("adm-zip");
 
+async function downloadOtaPackage(req, res) {
+    console.log("downloadOtaPackage: ", req.query);
+    const filename = req.query.filename;
+    if (!filename) {
+        console.log("Requested item wasn't found!, ?filename=xxxx is required!");
+        return res.status(409).send("?filename=xxxx is required!");
+    }
+
+    var dir = process.cwd() + '/ota_files';
+    const filePath = path.join(dir, filename);
+    if (fs.existsSync(filePath)) {
+        console.log('downloading:' + filename);
+        res.download(filePath);
+    } else {
+        return res.status(404).send("Requested item(" + filename + ") wasn't found!");
+    }
+}
+
 async function getOtaPackageInfo(req, res) {
     console.log("getOtaPackageInfo: ", req.query);
     const filename = req.query.filename;
@@ -110,5 +128,6 @@ function readFile(data, split_token) {
 }
 
 module.exports = {
+    downloadOtaPackage,
     getOtaPackageInfo,
 };

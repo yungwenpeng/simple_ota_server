@@ -79,6 +79,64 @@
                     }
                 }
             }
+        },
+        "/otaApi/download?filename={filename}": {
+            "get": {
+                "tags": [
+                    "ota-api-controller"
+                ],
+                "operationId": "downloadOTAPackageUsingGET",
+                "summary": "Download OTA Package",
+                "consumes": [
+                    "application/json"
+                ],
+                "description": "Download OTA Package based on the provided OTA Package file name.",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "required": true,
+                        "in": "path",
+                        "type": "string",
+                        "description": "A string value representing the ota package file name. For example, test-0000.zip"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/OtaPackageInfo"
+                        },
+                        "description": "A JSON array of ota package information"
+                    },
+                    "404": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer", "example": 404
+                                },
+                                "message": {
+                                    "type": "string", "example": "Requested item wasn't found!"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "409": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer", "example": 409
+                                },
+                                "message": {
+                                    "type": "string", "example": "Invalid request body"
+                                }
+                            }
+                        },
+                        "description": "Bad Request"
+                    }
+                }
+            }
         }
     },
     "definitions": {
