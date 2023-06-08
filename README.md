@@ -6,6 +6,7 @@
 Test API tool:[Postman](https://www.postman.com/downloads/)  
 Simplify API development:[Swagger](https://swagger.io/)  
 [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)  
+[ws: a Node.js WebSocket library](https://www.npmjs.com/package/ws)  
   
 ### how to use  
 1. upload ota package files to 'ota_files'  

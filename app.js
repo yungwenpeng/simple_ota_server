@@ -14,11 +14,27 @@ var options = {
   customCss: fs.readFileSync(("./swagger.css"), 'utf8')
 };
 
+var WebSocket = require('ws');
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+const wss = new WebSocket.Server({ noServer: true });
+wss.on('connection', function connection(ws) {
+  console.log('[SERVER] client connected size: ', wss.clients.size);
+
+  ws.on('message', function incoming(message) {
+    console.log('[SERVER] Received WebSocket message:', message);
+  });
+
+  ws.on('close', function close() {
+    console.log('[SERVER] WebSocket connection closed.');
+  });
+});
+app.set('wss', wss);
 
 app.use(logger('dev'));
 app.use(express.json());

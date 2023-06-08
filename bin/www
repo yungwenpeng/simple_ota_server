@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('ota-server:server');
 var http = require('http');
+const ip = require('ip');
+const host = ip.address();
+var WebSocket = require('ws');
 
 require("dotenv").config();
 
@@ -22,12 +25,21 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+server.on('upgrade', function upgrade(request, socket, head) {
+  const wss = app.get('wss');
+  wss.handleUpgrade(request, socket, head, function done(ws) {
+    wss.emit('connection', ws, request);
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, function (error) {
+  if (error) console.log("Error in server setup");
+  console.log(`Server is listening on http://${host}:${port}`);
+});
 server.on('error', onError);
 server.on('listening', onListening);
 

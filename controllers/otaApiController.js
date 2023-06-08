@@ -2,6 +2,20 @@ const fs = require('fs');
 const path = require("path");
 const AdmZip = require("adm-zip");
 const formidable = require('formidable');
+const WebSocket = require("ws");
+
+const broadcast = (clients, method, message) => {
+    clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            console.log('[SERVER] broadcast(',method,'): ', JSON.stringify(message));
+            client.send(JSON.stringify(message), (err) => {
+                if(err){
+                    console.log(`[SERVER] error:${err}`);
+                }
+            });
+        }
+    });
+}
 
 async function downloadOtaPackage(req, res) {
     console.log("downloadOtaPackage: ", req.query);
@@ -161,6 +175,13 @@ async function uploadOtaPackage(req, res) {
                 return res.status(500).json({ error: 'Failed to save file' });
             }
 
+            const wss = req.app.get('wss');
+            const uploadInfo = {
+                filename: filename,
+                size: uploadedFile.size,
+                method: 'upload'
+            };
+            broadcast(wss.clients, 'upload', uploadInfo)
             return res.json({ message: 'File uploaded successfully' });
         });
     });
